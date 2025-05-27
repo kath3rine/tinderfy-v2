@@ -1,61 +1,81 @@
-from flask import Flask, session, make_response, redirect, request
-from urllib.parse import urlencode
+from flask import Flask, session, redirect, request
 from util import *
 import requests
 from user import User
-from playlist import Playlist
+from match import Match
 from secret import CLIENT_ID, CLIENT_SECRET
 
 REDIRECT_URI = "http://127.0.0.1:5000/callback"
+SCOPE = "user-top-read user-library-read user-read-private user-read-email"
 
 app = Flask(__name__)
 app.secret_key = "secretkey"
 
+# log into spotify
 @app.route('/')
 def login():
-    payload = {
-        'client_id': CLIENT_ID,
-        'response_type': 'code',
-        'redirect_uri': REDIRECT_URI, 
-        'scope': 'user-top-read user-library-read'
-    }
-    return make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))
+    auth_url = (
+        f"{AUTH_URL}?response_type=code"
+        f"&client_id={CLIENT_ID}"
+        f"&redirect_uri={REDIRECT_URI}"
+        f"&scope={SCOPE}"
+    )
+    return redirect(auth_url)
 
+# spotify auth
 @app.route('/callback')
 def callback():
     code = request.args.get('code')
+    if not code:
+        return "authorization failed"
+    
     payload = {
         'grant_type': 'authorization_code',
         'code': code,
         'redirect_uri': REDIRECT_URI,
+        'client_id': CLIENT_ID,
+        "client_secret": CLIENT_SECRET
     }
 
-    response = requests.post(TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET), data=payload)
+    response = requests.post(TOKEN_URL, data=payload)
     response = response.json()
     session['tokens'] = {
         'access_token': response.get('access_token'),
         'refresh_token': response.get('refresh_token'),
     }
 
-    return redirect('/profile')
+    return redirect('/me')
 
-@app.route('/profile')
-def profile():
-    tmp = "5KBKqxYY263Tr0haAu3fMz"
+# user's tinder profile
+@app.route('/me')
+def me():
     headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
     
-    #playlist = Playlist(headers, "11dFghVXANMlKmJXsNCbNl")
-    #return str(playlist.test)
-    #return str(playlist.test)
     user = User(headers)
-    #return f"track: {user.tid} data: {str(user.test)}"
-    artists = user.artist_names
-    genres = user.genres
-    name = user.name
-    albums = user.albums
-    tracks = user.track_titles
-    track_artists = user.track_artists
-    return f"Name: {str(name)}, Top Artists: {str(artists)[1:-1]}, Top Albums: {str(albums)}, Top Genres: {str(genres)}, Tracks: {str(tracks)}, Track Artists: {str(track_artists)}"
+    
+    
+    tracks = user.tracks
+    artists = user.artists
+    match = Match(artists["names"][4])
+    rec = match.rec_artist
+
+    artist_str = f"top artists: {artists['names']}"
+    genre_str = f"top genres: {artists['genres']}"
+    track_str = f"top tracks: {tracks['titles']} by {tracks['artists']}"
+    rec_str = f"recommended arrist: {rec}"
+
+    return f"{artist_str}{genre_str}{track_str}{rec_str}"
+
+# enter other user's info
+@app.route('/match')
+def match():
+    return redirect('/result')
+
+# results of compatibility assessment
+@app.route('/result')
+def result():
+    return result
+
     
 if __name__ == '__main__':
     app.run(debug=True)

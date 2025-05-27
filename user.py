@@ -4,28 +4,24 @@ from util import *
 class User():
     def __init__(self, header):
         self.header = header
-
         self.name = self.get_user()["name"]
         self.pfp = self.get_user()["pfp"]
-
-        self.artist_names = self.get_artists()["names"]
-        self.artist_ids = self.get_artists()["ids"]
-        self.genres = self.get_artists()["genres"]
-
-        self.track_titles = self.get_tracks()["titles"]
-        self.track_ids = self.get_tracks()["ids"]
-        self.track_artists = self.get_tracks()["artists"]
-
+        self.tracks = self.get_tracks() # titles, artists, ids
+        self.artists = self.get_artists() # names, ids, genres
         self.albums = self.get_albums()
     
     def get_my_data(self, param):
-        data = requests.get(f"{BASE_URL}me/{param}", headers=self.header)
+        data = requests.get(f"{BASE_URL}/me/{param}", headers=self.header)
+        if data.status_code != 200:
+            return data.response_text
         return data.json()
     
     def get_user(self): 
         data = self.get_my_data("")
-        return {"name": data['display_name'],
-             "pfp": data['images'][0]['url']}
+        return {
+            "name": data['display_name'],
+            "pfp": data['images'][0]['url']
+        }
     
     def get_artists(self): 
         data = self.get_my_data("top/artists?limit=5")
@@ -37,15 +33,19 @@ class User():
             if a['genres']:
                 genres.add(a['genres'][0])
     
-        return {"names": names,
-             "ids": ids,
-             "genres": genres}
+        return {
+            "names": names,
+            "ids": ids,
+            "genres": genres
+        }
     
     def get_tracks(self): 
         data = self.get_my_data("top/tracks?limit=5")
-        return {"titles": [t['name'] for t in data['items']],
-               "artists": [t['artists'][0]['name'] for t in data['items']],
-               "ids": [t['id'] for t in data['items']]}
+        return {
+            "titles": [t['name'] for t in data['items']],
+            "artists": [t['artists'][0]['name'] for t in data['items']],
+            "ids": [t['id'] for t in data['items']]
+        }
     
     def get_albums(self):
         data = self.get_my_data("albums?limit=5")
