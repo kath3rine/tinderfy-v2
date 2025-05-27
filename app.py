@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 from util import *
 import requests
 from user import User
+from playlist import Playlist
 from secret import CLIENT_ID, CLIENT_SECRET
 
 REDIRECT_URI = "http://127.0.0.1:5000/callback"
@@ -40,6 +41,21 @@ def callback():
 
 @app.route('/profile')
 def profile():
+    tmp = "5KBKqxYY263Tr0haAu3fMz"
     headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
+    
+    #playlist = Playlist(headers, "11dFghVXANMlKmJXsNCbNl")
+    #return str(playlist.test)
+    #return str(playlist.test)
     user = User(headers)
-    return f"Name: {user.name}, Top Artists: {str(user.artist_names)[1:-1]}, Top Genres: {str(user.genres)[1:-1]}, Top Tracks: {str(user.track_names)[1:-1]} Top Albums: {str(user.albums)[1:-1]}"
+    #return f"track: {user.tid} data: {str(user.test)}"
+    artists = user.artist_names
+    genres = user.genres
+    name = user.name
+    albums = user.albums
+    tracks = user.track_titles
+    track_artists = user.track_artists
+    return f"Name: {str(name)}, Top Artists: {str(artists)[1:-1]}, Top Albums: {str(albums)}, Top Genres: {str(genres)}, Tracks: {str(tracks)}, Track Artists: {str(track_artists)}"
+    
+if __name__ == '__main__':
+    app.run(debug=True)
