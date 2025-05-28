@@ -26,13 +26,30 @@ const MePage = () => {
   return(
     <div>{data &&
       <div className="profile-base">
-        <Header name={data.name} pfp={data.pfp}/>
-        <AboutMe names={data.track_names} artists={data.track_artists}/>
-        <Essentials list={data.artist_names}/>
-        <Interests list={data.genres}/>
-        <LookingFor x={data.popularity}/>
-        <Basics artist={data.rec_artist} track={data.rec_track}/>
-        <MyAnthem name={data.album} pfp={data.album_pfp} artist={data.album_artist}/>
+        <Header name={data.name} 
+          pfp={data.pfp}/>
+
+        <AboutMe title="My top songs"
+          names={data.track_names} 
+          artists={data.track_artists}/>
+
+        <Essentials title="My top artists"
+          list={data.artist_names.slice(0, 3)}/>
+
+        <Interests title="Genres"
+          list={data.genres}/>
+
+        <LookingFor title="Uniqueness score"
+          x={100 - data.popularity}/>
+
+        <Basics title="Recommendations"
+          artist={data.rec_artist} 
+          track={data.rec_track}/>
+
+        <MyAnthem title="My album"
+          name={data.album} 
+          pfp={data.album_pfp} 
+          artist={data.album_artist}/>
       </div>  
     }
       

@@ -1,8 +1,8 @@
-function LookingFor({x}) {
+function LookingFor(props) {
     return(
         <div className="component" id="looking-for">
-            <h3>Music popularity</h3>
-            <h2>{x} / 100</h2>
+            <h3>{props.title}</h3>
+            <h2>{props.x} / 100</h2>
         </div>
     );
 }

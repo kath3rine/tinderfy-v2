@@ -57,22 +57,24 @@ def callback():
 def me():
     if 'tokens' not in session:
         return jsonify({'error': 'Not authenticated'}), 401
-    headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
     
+    headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
     user = User(headers)
     response = user.to_json()
 
     return response
 
 # enter other user's info
-@app.route('/match')
+@app.route('/match', methods=['POST'])
 def match():
-    return redirect('/result')
+    data = request.json
+    pid = data.get('pid')
 
-# results of compatibility assessment
-@app.route('/result')
-def result():
-    return result
+    if not pid:
+        return "error no pid"
+    
+    return jsonify({"pid" : pid})
+
 
     
 if __name__ == '__main__':

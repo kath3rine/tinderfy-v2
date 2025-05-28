@@ -11,12 +11,10 @@ class Person():
 
         # artist + genre data
         self.artist_names = []
-        self.artist_ids = []
         self.genres = []
 
         # track data
         self.track_names = []
-        self.track_ids = []
         self.track_artists = []
 
         # album data
@@ -84,13 +82,13 @@ class User(Person):
 
         # artist + genre data
         artist_pop = 0
-        artist_data = self.get_my_data("top/artists?limit=5")
+        artist_data = self.get_my_data("top/artists?limit=10")
         for a in artist_data['items']:
             self.artist_names.append(a['name'])
-            self.artist_ids.append(a['id'])
             artist_pop += a['popularity']
             if a['genres']:
                 self.genres.append(a['genres'][0])
+            self.genres = list(dict.fromkeys(self.genres))[:5]
 
         # track data
         track_pop = 0
@@ -98,11 +96,10 @@ class User(Person):
         for t in track_data['items']:
             self.track_names.append(t['name'])
             self.track_artists.append(t['artists'][0]['name'])
-            self.track_ids.append(t['id'])
             track_pop += t['popularity']
         
         # popularity data
-        self.popularity = (track_pop + artist_pop) // 10
+        self.popularity = (track_pop + artist_pop) // (len(self.track_names) + len(self.artist_names))
         
         # album data
         album_data = self.get_my_data("albums?limit=1")['items'][0]['album']
@@ -114,7 +111,13 @@ class User(Person):
         self.rec_artist = self.similar_artist(self.artist_names[0])
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
     
-
+class Partner(Person):
+    def __init__(self, headers, pid, name):
+        super().__init__()
+        self.header = headers
+    
+    def initialize_partner(self):
+        return
 
 
 
