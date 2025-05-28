@@ -1,14 +1,16 @@
-from flask import Flask, session, redirect, request
+from flask import Flask, session, redirect, request, jsonify
+from flask_cors import CORS
 from util import *
 import requests
 from user import User
 from match import Match
 from secret import CLIENT_ID, CLIENT_SECRET
 
-REDIRECT_URI = "http://127.0.0.1:5000/callback"
+REDIRECT_URI = "http://localhost:5000/callback"
 SCOPE = "user-top-read user-library-read user-read-private user-read-email"
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
 app.secret_key = "secretkey"
 
 # log into spotify
@@ -26,6 +28,7 @@ def login():
 @app.route('/callback')
 def callback():
     code = request.args.get('code')
+
     if not code:
         return "authorization failed"
     
@@ -38,6 +41,10 @@ def callback():
     }
 
     response = requests.post(TOKEN_URL, data=payload)
+
+    if response.status_code != 200:
+        return response.text
+    
     response = response.json()
     session['tokens'] = {
         'access_token': response.get('access_token'),
@@ -47,24 +54,22 @@ def callback():
     return redirect('/me')
 
 # user's tinder profile
-@app.route('/me')
+@app.route('/me', methods=['GET'])
 def me():
+    if 'tokens' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
     headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
     
     user = User(headers)
-    
-    
-    tracks = user.tracks
     artists = user.artists
     match = Match(artists["names"][4])
     rec = match.rec_artist
 
-    artist_str = f"top artists: {artists['names']}"
-    genre_str = f"top genres: {artists['genres']}"
-    track_str = f"top tracks: {tracks['titles']} by {tracks['artists']}"
-    rec_str = f"recommended arrist: {rec}"
+    response = dict()
+    response ['artists'] = artists['names']
+    response ['rec'] = rec
 
-    return f"{artist_str}{genre_str}{track_str}{rec_str}"
+    return jsonify(response)
 
 # enter other user's info
 @app.route('/match')
@@ -78,4 +83,4 @@ def result():
 
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="localhost")
