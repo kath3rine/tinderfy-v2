@@ -53,7 +53,7 @@ def callback():
     return redirect('/me')
 
 # user's tinder profile
-@app.route('/me', methods=['GET'])
+@app.route('/user', methods=['GET'])
 def me():
     if 'tokens' not in session:
         return jsonify({'error': 'Not authenticated'}), 401

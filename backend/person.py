@@ -64,7 +64,7 @@ class Person():
         if data['similartracks']['track']:
             rec = data['similartracks']['track'][0]
             return f"{rec['name']} by {rec['artist']['name']}"
-        return f"no track similar to your top song: {track} by {artist}"
+        return f"None"
 
 class User(Person):
     def __init__(self, headers):
