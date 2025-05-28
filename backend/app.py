@@ -50,7 +50,7 @@ def callback():
         'refresh_token': response.get('refresh_token'),
     }
 
-    return redirect('/me')
+    return redirect('/user')
 
 # user's tinder profile
 @app.route('/user', methods=['GET'])

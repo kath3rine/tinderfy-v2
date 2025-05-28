@@ -22,6 +22,7 @@ class Person():
 
         # album data
         self.album = "no_album"
+        self.album_pfp = None
 
         # popularity data
         self.popularity = 0
@@ -110,6 +111,7 @@ class User(Person):
         # album data
         album_data = self.get_my_data("albums?limit=1")
         self.album = album_data['items'][0]['album']['name']
+        self.album_pfp = album_data['items'][0]['album']['images'][0]['url']
 
         # recommendations
         self.rec_artist = self.similar_artist(self.artist_names[0])

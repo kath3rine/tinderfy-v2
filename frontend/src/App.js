@@ -1,7 +1,7 @@
     // App.js
     import React from 'react';
     import { BrowserRouter, Route, Routes } from 'react-router-dom';
-    import UserPage from './components/UserPage';
+    import UserPage from './pages/UserPage';
     
     function App() {
         return (
