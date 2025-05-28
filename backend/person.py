@@ -2,7 +2,6 @@ import requests
 import json
 from util import *
 from secret import API_KEY, SHARED_SECRET, USER_AGENT
-from abc import ABC, abstractmethod
 
 class Person():
     def __init__(self):
@@ -23,6 +22,7 @@ class Person():
         # album data
         self.album = "no_album"
         self.album_pfp = None
+        self.album_artist = None
 
         # popularity data
         self.popularity = 0
@@ -30,10 +30,6 @@ class Person():
         # recommendations
         self.rec_artist = "no_artist"
         self.rec_track = "no_track"
-    
-    @abstractmethod
-    def initialize():
-        pass
     
     def to_json(self):
         my_dict = self.__dict__
@@ -109,9 +105,10 @@ class User(Person):
         self.popularity = (track_pop + artist_pop) // 10
         
         # album data
-        album_data = self.get_my_data("albums?limit=1")
-        self.album = album_data['items'][0]['album']['name']
-        self.album_pfp = album_data['items'][0]['album']['images'][0]['url']
+        album_data = self.get_my_data("albums?limit=1")['items'][0]['album']
+        self.album = album_data['name']
+        self.album_pfp = album_data['images'][0]['url']
+        self.album_artist = album_data['artists'][0]['name']
 
         # recommendations
         self.rec_artist = self.similar_artist(self.artist_names[0])

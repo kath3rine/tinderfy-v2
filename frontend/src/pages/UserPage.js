@@ -7,6 +7,7 @@ import LookingFor from '../components/LookingFor'
 import Basics from '../components/Basics'
 import MyAnthem from '../components/MyAnthem';
 import axios from "axios";
+import '../styles/Profile.css'
 
 const MePage = () => {
   const [data, setData] = useState(null);
@@ -23,14 +24,18 @@ const MePage = () => {
   if (error) return <div>{error.toString()}</div>
 
   return(
-    <div>
-      <Header name={data.name} pfp={data.pfp}/>
-      <AboutMe names={data.track_names} artists={data.track_artists}/>
-      <Essentials list={data.artist_names}/>
-      <Interests list={data.genres}/>
-      <LookingFor x={data.popularity}/>
-      <Basics artist={data.rec_artist} track={data.rec_track}/>
-      <MyAnthem name={data.album} pfp={data.album_pfp}/>
+    <div>{data &&
+      <div className="profile-base">
+        <Header name={data.name} pfp={data.pfp}/>
+        <AboutMe names={data.track_names} artists={data.track_artists}/>
+        <Essentials list={data.artist_names}/>
+        <Interests list={data.genres}/>
+        <LookingFor x={data.popularity}/>
+        <Basics artist={data.rec_artist} track={data.rec_track}/>
+        <MyAnthem name={data.album} pfp={data.album_pfp} artist={data.album_artist}/>
+      </div>  
+    }
+      
     </div>
   );
   

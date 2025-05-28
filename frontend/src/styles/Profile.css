@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+:root {
+    --orange: #fd5564;
+    --background: #c6d1f0;
+    --lt-grey: #e8ebf2;
+    --md-grey: #565761;
+    --dk-grey: #363639;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background-color: var(--background);
+}
+
+.profile-base {
+    width: 500px;
+    margin: auto;
+}
+
+.component {
+    background-color: white;
+    margin: 10px 0px 10px 0px;
+    padding: 20px 30px 20px 30px;
+    border-radius: 10px;
+}
+
+.component h3 {
+    color: var(--md-grey);
+    margin-bottom: 10px;
+}
+
+#header {
+    padding-bottom: 0px;
+    padding-top: 1px;
+    margin-top: 0px;
+}
+
+#header h1 {
+    color: var(--dk-grey);
+}
+
+#pfp{
+    margin-left: 30%;
+    margin-right: 30%;
+    width: 40%;
+}
+
+#about-me p {
+    margin: 5px;
+}
+
+#essentials li {
+    padding: 5px;
+    
+}
+
+.essential {
+    border-bottom: 1px var(--lt-grey) solid;
+}
+
+#bubbles {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#bubble {
+    border-radius: 30px;
+    padding: 5px 10px 5px 10px;
+    margin: 5px;
+    background-color: var(--lt-grey);
+}
+
+#artist-track-rec {
+    border-bottom: 1px var(--lt-grey) solid;
+}
+
+#no-track-rec {
+    display: none
+}
+
+.basic-title {
+    font-weight: 700;
+    color: var(--md-grey);
+}
+
+#my-anthem-container {
+    display: flex;
+}
+
+#my-anthem img {
+    width: 100px;
+}
+
+#my-anthem-text {
+    margin-top: 0px;
+    margin-left: 15px;
+}
+
+#my-anthem-text h3 {
+    color: var(--dk-grey);
+}
+
+#my-anthem-text p {
+    margin-top: 0px;
+}

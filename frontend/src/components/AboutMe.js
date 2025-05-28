@@ -1,9 +1,10 @@
+
 function AboutMe(props) {
     return(
-        <div>
-              favorite songs: 
+        <div className="component" id="about-me">
+              <h3>" My top songs</h3>
               {[0, 1, 2, 3, 4].map((i) => (
-                <li>{i + 1}. {props.names[i]} by {props.artists[i]}</li>
+                <p>{i + 1}. {props.names[i]} by {props.artists[i]}</p>
               ))}
         </div>
     );
