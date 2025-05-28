@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import '../styles/MePage.css';
 
 const MePage = () => {
   const [data, setData] = useState(null);
@@ -18,7 +19,7 @@ const MePage = () => {
   return (
     <div>
       <h1>Me</h1>
-      {data && <p>{data.artists.toString()}</p>}
+      <p>{data && JSON.stringify(data)}</p>
     </div>
   );
 }

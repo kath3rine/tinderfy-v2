@@ -2,8 +2,7 @@ from flask import Flask, session, redirect, request, jsonify
 from flask_cors import CORS
 from util import *
 import requests
-from user import User
-from match import Match
+from person import User
 from secret import CLIENT_ID, CLIENT_SECRET
 
 REDIRECT_URI = "http://localhost:5000/callback"
@@ -61,15 +60,9 @@ def me():
     headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
     
     user = User(headers)
-    artists = user.artists
-    match = Match(artists["names"][4])
-    rec = match.rec_artist
+    response = user.to_json()
 
-    response = dict()
-    response ['artists'] = artists['names']
-    response ['rec'] = rec
-
-    return jsonify(response)
+    return response
 
 # enter other user's info
 @app.route('/match')
