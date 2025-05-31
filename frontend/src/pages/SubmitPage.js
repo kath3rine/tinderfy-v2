@@ -6,7 +6,7 @@ const SubmitPage = () => {
     const [pid, setPid] = useState('')
     const navigation = useNavigate();
 
-    const submit = async(e) => {
+    const goToPartner = async(e) => {
         e.preventDefault();
         try {
             const response = await axios.post(
@@ -22,15 +22,17 @@ const SubmitPage = () => {
     };
 
     return(
-        <form onSubmit={submit}>
-            <input 
+        <div>
+        <input 
                 type="text"
                 value={pid}
                 onChange={e => setPid(e.target.value)}
                 placeholder="Enter partner's playlist URL"
             />
+        <form onSubmit={goToPartner}>
             <button type="submit">See partner's profile</button>
         </form>
+        </div>
     );
 }
 export default SubmitPage;

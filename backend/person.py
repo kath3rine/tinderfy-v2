@@ -125,6 +125,11 @@ class Partner(Person):
         
         # user data
         self.name=playlist_data["owner"]["display_name"]
+        user_id = playlist_data["owner"]["id"]
+        user_response = requests.get(f"{BASE_URL}/users/{user_id}", headers=self.header)
+        user_data = user_response.response_text if user_response.status_code != 200 else user_response.json()
+        if user_data["images"]:
+            self.pfp = user_data["images"][0]["url"]
 
         artist_ids = []
         track_pop = 0
@@ -145,7 +150,7 @@ class Partner(Person):
             artist_ids.append(t['track']['artists'][0]['id'])
             self.artist_names.append(t['track']['artists'][0]['name'])
         
-        self.artist_names = [artist for artist, count in Counter(self.artist_names).most_common(3)]
+        self.artist_names = [a for a, cnt in Counter(self.artist_names).most_common(3)]
         
         # genre data
         artist_ids = list(set(artist_ids))
@@ -158,8 +163,11 @@ class Partner(Person):
             artist_pop += a['popularity']
             if a['genres']:
                 self.genres.append(a['genres'][0])
+        self.genres = [g for g, cnt in Counter(self.genres).most_common(5)]
         
         # popularity data
         self.popularity = (track_pop + artist_pop) // (len(playlist_data['tracks']['items']) + len(artist_data['artists']))
 
-        
+        # recommendations
+        self.rec_artist = self.similar_artist(self.artist_names[0])
+        self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])

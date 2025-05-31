@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header'
 import AboutMe from '../components/AboutMe'
 import Essentials from '../components/Essentials'
@@ -12,16 +12,23 @@ import '../styles/Profile.css'
 const PartnerPage = () => {
     const location = useLocation();
     const { message } = location.state || {};
+    const navigate = useNavigate();
+    
+    const goToUser = () => {
+        navigate('/');
+    }
 
     return (
         <div>
-            <h1>partner page</h1>
+            <button onClick={goToUser}>
+                My profile
+            </button>
             {message && 
-            
+                
                 <div className="profile-base">
                     <Header name={message.name} 
                     pfp={message.pfp}/>
-            
+ 
                     <AboutMe title="My top songs"
                     names={message.track_names} 
                     artists={message.track_artists}/>
