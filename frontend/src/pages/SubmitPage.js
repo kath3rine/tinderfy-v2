@@ -9,14 +9,15 @@ const SubmitPage = () => {
     const submit = async(e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/match', {
-                pid: pid
-            });
-            const message = response.data.pid;
+            const response = await axios.post(
+                'http://localhost:5000/match', 
+                { pid: pid },
+                {withCredentials: true} 
+            );
+            const message = response.data.message;
             navigation('/partner', { state: { message }});
         } catch (err) {
-            console.error(err);
-            alert('couldnt get pid');
+            alert(err);
         }
     };
 

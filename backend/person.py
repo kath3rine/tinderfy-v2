@@ -1,13 +1,14 @@
 import requests
 import json
 from util import *
+from collections import Counter
 from secret import API_KEY, SHARED_SECRET, USER_AGENT
 
 class Person():
     def __init__(self):
         # user data
-        self.name = "default_name"
-        self.pfp = None
+        self.name = "no_name"
+        self.pfp = "no_pfp"
 
         # artist + genre data
         self.artist_names = []
@@ -19,20 +20,20 @@ class Person():
 
         # album data
         self.album = "no_album"
-        self.album_pfp = None
-        self.album_artist = None
+        self.album_pfp = "no_album_pfp"
+        self.album_artist = "no_album_artist"
 
         # popularity data
         self.popularity = 0
 
         # recommendations
-        self.rec_artist = "no_artist"
-        self.rec_track = "no_track"
+        self.rec_artist = "no_rec_artist"
+        self.rec_track = "no_rec_track"
     
     def to_json(self):
         my_dict = self.__dict__
         del my_dict['header']
-        return json.dumps(my_dict, indent=2)
+        return my_dict
     
     # methods for using lastfm api 
     def lastfm_api(self, method: str, parameters: list):
@@ -112,15 +113,37 @@ class User(Person):
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
     
 class Partner(Person):
-    def __init__(self, headers, pid, name):
+    def __init__(self, headers, playlist):
         super().__init__()
+        self.playlist = playlist[34:56]
         self.header = headers
+        #self.data = self.get_data("playlists", self.playlist)
+        self.initialize_partner()
+    
+    def get_data(self, param1, param2):
+        data = requests.get(f"{BASE_URL}/{param1}/{param2}", headers=self.header)
+        if data.status_code != 200:
+            return data.response_text
+        return data.json()
     
     def initialize_partner(self):
-        return
+        playlist_data = self.get_data("playlists", self.playlist)
+        
+        # user data
+        self.name=playlist_data["owner"]["display_name"]
 
+        track_ids = []
+        for t in playlist_data['tracks']['items']:
+            # track data
+            self.track_names.append(t['track']['name'])
+            self.track_artists.append(t['track']['artists'][0]['name'])
 
+            # album data
+            if self.album == "no_album":
+                self.album = t['track']['album']['name']
+                self.album_artist = t['track']['album']['artists'][0]['name']
+                self.album_pfp = t['track']['album']['images'][0]['url']
 
-
-    
-    
+        
+        # artist data
+        self.artist_names = self.track_artists # TODO: identify most common artists

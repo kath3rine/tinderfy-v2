@@ -21,7 +21,7 @@ body {
 .component {
     background-color: white;
     margin: 10px 0px 10px 0px;
-    padding: 20px 30px 20px 30px;
+    padding: 5%;
     border-radius: 10px;
 }
 
@@ -31,19 +31,29 @@ body {
 }
 
 #header {
-    padding-bottom: 0px;
-    padding-top: 1px;
     margin-top: 0px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #header h1 {
     color: var(--dk-grey);
+    margin-top: 0px;
 }
 
-#pfp{
-    margin-left: 30%;
-    margin-right: 30%;
-    width: 40%;
+#name-container {
+    width: 74%;
+    text-wrap: pretty;
+}
+
+#pfp-container {
+    width: 25%;
+    float: right;
+}
+
+#pfp {
+    width: 100%;
+    float: right;
 }
 
 #about-me p {
