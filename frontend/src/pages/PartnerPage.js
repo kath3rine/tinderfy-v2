@@ -17,6 +17,7 @@ const PartnerPage = () => {
         <div>
             <h1>partner page</h1>
             {message && 
+            
                 <div className="profile-base">
                     <Header name={message.name} 
                     pfp={message.pfp}/>

@@ -1,6 +1,6 @@
 import requests
-import json
 from util import *
+import json
 from collections import Counter
 from secret import API_KEY, SHARED_SECRET, USER_AGENT
 
@@ -117,33 +117,49 @@ class Partner(Person):
         super().__init__()
         self.playlist = playlist[34:56]
         self.header = headers
-        #self.data = self.get_data("playlists", self.playlist)
         self.initialize_partner()
     
-    def get_data(self, param1, param2):
-        data = requests.get(f"{BASE_URL}/{param1}/{param2}", headers=self.header)
-        if data.status_code != 200:
-            return data.response_text
-        return data.json()
-    
     def initialize_partner(self):
-        playlist_data = self.get_data("playlists", self.playlist)
+        playlist_response = requests.get(f"{BASE_URL}/playlists/{self.playlist}", headers=self.header)
+        playlist_data = playlist_response.response_text if playlist_response.status_code != 200 else playlist_response.json()
         
         # user data
         self.name=playlist_data["owner"]["display_name"]
 
-        track_ids = []
+        artist_ids = []
+        track_pop = 0
         for t in playlist_data['tracks']['items']:
             # track data
-            self.track_names.append(t['track']['name'])
-            self.track_artists.append(t['track']['artists'][0]['name'])
+            if len(self.track_names) < 5:
+                self.track_names.append(t['track']['name'])
+                self.track_artists.append(t['track']['artists'][0]['name'])
 
-            # album data
-            if self.album == "no_album":
-                self.album = t['track']['album']['name']
-                self.album_artist = t['track']['album']['artists'][0]['name']
-                self.album_pfp = t['track']['album']['images'][0]['url']
+                # album data
+                if self.album == "no_album":
+                    self.album = t['track']['album']['name']
+                    self.album_artist = t['track']['album']['artists'][0]['name']
+                    self.album_pfp = t['track']['album']['images'][0]['url']
+
+            # artist data
+            track_pop += t['track']['popularity']
+            artist_ids.append(t['track']['artists'][0]['id'])
+            self.artist_names.append(t['track']['artists'][0]['name'])
+        
+        self.artist_names = [artist for artist, count in Counter(self.artist_names).most_common(3)]
+        
+        # genre data
+        artist_ids = list(set(artist_ids))
+        aid_str = ",".join(artist_ids)
+        artist_response = requests.get(f"{BASE_URL}/artists", params={"ids": aid_str}, headers=self.header)
+        artist_data = artist_response.response_text if artist_response.status_code != 200 else artist_response.json()
+        
+        artist_pop = 0
+        for a in artist_data['artists']:
+            artist_pop += a['popularity']
+            if a['genres']:
+                self.genres.append(a['genres'][0])
+        
+        # popularity data
+        self.popularity = (track_pop + artist_pop) // (len(playlist_data['tracks']['items']) + len(artist_data['artists']))
 
         
-        # artist data
-        self.artist_names = self.track_artists # TODO: identify most common artists
