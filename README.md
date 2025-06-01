@@ -1,2 +1,7 @@
-refactoring to be compatible w/ updated spotify api + match new tinder ui.
-original: https://github.com/kath3rine/tinderfy
+comparison:
+![alt text](./images/comparison1.jpeg)
+
+example screen:
+![alt text](images/screen2.png)
+
+old version: https://github.com/kath3rine/tinderfy
