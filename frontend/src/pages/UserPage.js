@@ -6,6 +6,7 @@ import Interests from '../components/Interests'
 import LookingFor from '../components/LookingFor'
 import Basics from '../components/Basics'
 import MyAnthem from '../components/MyAnthem';
+import Menu from '../components/Menu';
 import axios from "axios";
 import '../styles/Profile.css'
 
@@ -24,7 +25,11 @@ const MePage = () => {
   if (error) return <div>{error.toString()}</div>
 
   return(
+    <div>
+      
+    
     <div>{data &&
+      
       <div className="profile-base">
         <Header name={data.name} 
           pfp={data.pfp}/>
@@ -50,9 +55,11 @@ const MePage = () => {
           name={data.album} 
           pfp={data.album_pfp} 
           artist={data.album_artist}/>
+        
+        <Menu/>
       </div>  
     }
-      
+    </div>
     </div>
   );
   

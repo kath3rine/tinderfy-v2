@@ -1,35 +1,48 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/Submit.css';
 import { useNavigate } from 'react-router-dom';
+import Menu from '../components/Menu';
 
 const SubmitPage = () => {
     const [pid, setPid] = useState('')
     const navigation = useNavigate();
 
-    const submit = async(e) => {
+    const goToPartner = async(e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/match', {
-                pid: pid
-            });
-            const message = response.data.pid;
+            const response = await axios.post(
+                'http://localhost:5000/match', 
+                { pid: pid },
+                {withCredentials: true} 
+            );
+            const message = response.data.message;
             navigation('/partner', { state: { message }});
         } catch (err) {
-            console.error(err);
-            alert('couldnt get pid');
+            alert(err);
         }
     };
 
     return(
-        <form onSubmit={submit}>
-            <input 
-                type="text"
-                value={pid}
-                onChange={e => setPid(e.target.value)}
-                placeholder="Enter partner's playlist URL"
+        <div id="submit-base"
+        className="profile-base">
+            <h1>Find My Match</h1>
+
+            <input className='submit-component'
+            type="text"
+            value={pid}
+            onChange={e => setPid(e.target.value)}
+            placeholder="Enter the URL of your partner's playlist"
             />
-            <button type="submit">See partner's profile</button>
-        </form>
+
+            <form onSubmit={goToPartner}>
+                <button className='submit-component'
+                type="submit">
+                    See partner's profile
+                </button>
+            </form>
+            <Menu/>
+        </div>
     );
 }
 export default SubmitPage;

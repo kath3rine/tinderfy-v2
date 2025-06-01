@@ -1,13 +1,14 @@
 import requests
-import json
 from util import *
+import json
+from collections import Counter
 from secret import API_KEY, SHARED_SECRET, USER_AGENT
 
 class Person():
     def __init__(self):
         # user data
-        self.name = "default_name"
-        self.pfp = None
+        self.name = "no_name"
+        self.pfp = "no_pfp"
 
         # artist + genre data
         self.artist_names = []
@@ -19,20 +20,20 @@ class Person():
 
         # album data
         self.album = "no_album"
-        self.album_pfp = None
-        self.album_artist = None
+        self.album_pfp = "no_album_pfp"
+        self.album_artist = "no_album_artist"
 
         # popularity data
         self.popularity = 0
 
         # recommendations
-        self.rec_artist = "no_artist"
-        self.rec_track = "no_track"
+        self.rec_artist = "no_rec_artist"
+        self.rec_track = "no_rec_track"
     
     def to_json(self):
         my_dict = self.__dict__
         del my_dict['header']
-        return json.dumps(my_dict, indent=2)
+        return my_dict
     
     # methods for using lastfm api 
     def lastfm_api(self, method: str, parameters: list):
@@ -112,15 +113,61 @@ class User(Person):
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
     
 class Partner(Person):
-    def __init__(self, headers, pid, name):
+    def __init__(self, headers, playlist):
         super().__init__()
+        self.playlist = playlist[34:56]
         self.header = headers
+        self.initialize_partner()
     
     def initialize_partner(self):
-        return
+        playlist_response = requests.get(f"{BASE_URL}/playlists/{self.playlist}", headers=self.header)
+        playlist_data = playlist_response.response_text if playlist_response.status_code != 200 else playlist_response.json()
+        
+        # user data
+        self.name=playlist_data["owner"]["display_name"]
+        user_id = playlist_data["owner"]["id"]
+        user_response = requests.get(f"{BASE_URL}/users/{user_id}", headers=self.header)
+        user_data = user_response.response_text if user_response.status_code != 200 else user_response.json()
+        if user_data["images"]:
+            self.pfp = user_data["images"][0]["url"]
 
+        artist_ids = []
+        track_pop = 0
+        for t in playlist_data['tracks']['items']:
+            # track data
+            if len(self.track_names) < 5:
+                self.track_names.append(t['track']['name'])
+                self.track_artists.append(t['track']['artists'][0]['name'])
 
+                # album data
+                if self.album == "no_album":
+                    self.album = t['track']['album']['name']
+                    self.album_artist = t['track']['album']['artists'][0]['name']
+                    self.album_pfp = t['track']['album']['images'][0]['url']
 
+            # artist data
+            track_pop += t['track']['popularity']
+            artist_ids.append(t['track']['artists'][0]['id'])
+            self.artist_names.append(t['track']['artists'][0]['name'])
+        
+        self.artist_names = [a for a, cnt in Counter(self.artist_names).most_common(3)]
+        
+        # genre data
+        artist_ids = list(set(artist_ids))
+        aid_str = ",".join(artist_ids)
+        artist_response = requests.get(f"{BASE_URL}/artists", params={"ids": aid_str}, headers=self.header)
+        artist_data = artist_response.response_text if artist_response.status_code != 200 else artist_response.json()
+        
+        artist_pop = 0
+        for a in artist_data['artists']:
+            artist_pop += a['popularity']
+            if a['genres']:
+                self.genres.append(a['genres'][0])
+        self.genres = [g for g, cnt in Counter(self.genres).most_common(5)]
+        
+        # popularity data
+        self.popularity = (track_pop + artist_pop) // (len(playlist_data['tracks']['items']) + len(artist_data['artists']))
 
-    
-    
+        # recommendations
+        self.rec_artist = self.similar_artist(self.artist_names[0])
+        self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])

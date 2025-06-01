@@ -2,7 +2,7 @@ from flask import Flask, session, redirect, request, jsonify
 from flask_cors import CORS
 from util import *
 import requests
-from person import User
+from person import User, Partner
 from secret import CLIENT_ID, CLIENT_SECRET
 
 REDIRECT_URI = "http://localhost:5000/callback"
@@ -73,7 +73,11 @@ def match():
     if not pid:
         return "error no pid"
     
-    return jsonify({"pid" : pid})
+    headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
+    partner = Partner(headers, pid)
+    response = partner.to_json()
+    
+    return jsonify({"message": response})
 
 
     

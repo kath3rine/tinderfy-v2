@@ -1,27 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
-:root {
-    --orange: #fd5564;
-    --background: #c6d1f0;
-    --lt-grey: #e8ebf2;
-    --md-grey: #565761;
-    --dk-grey: #363639;
-}
-
-body {
-    font-family: "Montserrat", sans-serif;
-    background-color: var(--background);
-}
+@import './Global.css';
 
 .profile-base {
+    border-radius: 10px;
     width: 500px;
     margin: auto;
+    padding: 5px;
+    background-color: var(--background);
 }
 
 .component {
     background-color: white;
     margin: 10px 0px 10px 0px;
-    padding: 20px 30px 20px 30px;
+    padding: 5%;
     border-radius: 10px;
 }
 
@@ -31,19 +21,29 @@ body {
 }
 
 #header {
-    padding-bottom: 0px;
-    padding-top: 1px;
     margin-top: 0px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #header h1 {
     color: var(--dk-grey);
+    margin-top: 0px;
 }
 
-#pfp{
-    margin-left: 30%;
-    margin-right: 30%;
-    width: 40%;
+#name-container {
+    width: 74%;
+    text-wrap: pretty;
+}
+
+#pfp-container {
+    width: 25%;
+    float: right;
+}
+
+#pfp {
+    width: 100%;
+    float: right;
 }
 
 #about-me p {

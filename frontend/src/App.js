@@ -7,6 +7,7 @@
     
     function App() {
         return (
+          <div>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<UserPage />} />
@@ -14,6 +15,7 @@
               <Route path="/partner" element={<PartnerPage />} />
             </Routes>
           </BrowserRouter>
+          </div>
         );
     }
     
