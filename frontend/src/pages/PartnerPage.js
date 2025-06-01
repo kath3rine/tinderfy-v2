@@ -28,7 +28,7 @@ const PartnerPage = () => {
                     <Header name={message.name} 
                     pfp={message.pfp}/>
  
-                    <AboutMe title="My top songs"
+                    <AboutMe title="My favorite songs"
                     names={message.track_names} 
                     artists={message.track_artists}/>
             

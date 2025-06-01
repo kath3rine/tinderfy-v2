@@ -153,7 +153,7 @@ class Partner(Person):
         self.artist_names = [a for a, cnt in Counter(self.artist_names).most_common(3)]
         
         # genre data
-        artist_ids = list(set(artist_ids))
+        artist_ids = list(set(artist_ids))[:49]
         aid_str = ",".join(artist_ids)
         artist_response = requests.get(f"{BASE_URL}/artists", params={"ids": aid_str}, headers=self.header)
         artist_data = artist_response.response_text if artist_response.status_code != 200 else artist_response.json()

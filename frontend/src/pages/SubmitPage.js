@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../styles/Submit.css';
 import { useNavigate } from 'react-router-dom';
 import Menu from '../components/Menu';
+import Tinder from '../assets/tinder.png'
 
 const SubmitPage = () => {
     const [pid, setPid] = useState('')
@@ -26,13 +27,17 @@ const SubmitPage = () => {
     return(
         <div id="submit-base"
         className="profile-base">
-            <h1>Find My Match</h1>
+            <div id="title-container">
+                <h1>Find My Match</h1>
+                <img src={Tinder}></img>
+            </div>
+            
 
             <input className='submit-component'
             type="text"
             value={pid}
             onChange={e => setPid(e.target.value)}
-            placeholder="Enter the URL of your partner's playlist"
+            placeholder="Enter a playlist URL"
             />
 
             <form onSubmit={goToPartner}>

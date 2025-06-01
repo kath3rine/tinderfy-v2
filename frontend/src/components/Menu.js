@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import '../styles/Menu.css';
 
-const Menu = () => {
+function Menu() {
     const navigate = useNavigate();
     const onClickUser = () => {
         navigate('/');

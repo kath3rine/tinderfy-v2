@@ -1,17 +1,31 @@
 @import './Global.css';
 
+#submit-base #title-container {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 15px;
+}
 
+#submit-base img {
+    height: 50px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
 
 .submit-component {
     margin: 2% 20% 2% 20%;
     width: 60%;
     font-size: 2vh;
     border-radius: 15px;
-    border: 2px var(--lt-grey) solid;
+    height: 50px;
 }
 
 input {
-    height: 100px;
+    border: 2px var(--lt-grey) solid;
     white-space: normal;
 }
 
@@ -21,14 +35,14 @@ input::placeholder {
 }
 
 button {
-    height: 50px;
     font-weight: 700;
-    color: var(--dk-grey);
-    background-color: var(--lt-grey);
+    color: white;
+    background-color: var(--orange);
+    border: none;
 }
 
 button:hover {
-    border: 3px var(--scarlet) solid;
+    background-color: var(--scarlet);
 }
 
 #submit-base {
@@ -39,6 +53,5 @@ button:hover {
 
 h1 {
     color: var(--dk-grey);
-    text-align: center;
-    margin-top: 10%;
+    
 }

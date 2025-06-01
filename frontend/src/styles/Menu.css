@@ -2,14 +2,15 @@
 
 #menu {
     position: fixed;
-    top: 95vh;
-    width: 500px;
+    top: 92vh;
+    width: 480px;
     bottom: 0;
     background-color: white;
     display: flex;
     flex-wrap: wrap;
-    border-radius: 10px;
-    border-top: 3px var(--lt-grey) solid;
+    border-top: 2px var(--scarlet) solid;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .menu-button {
@@ -17,8 +18,11 @@
     border-radius: 15px;
     border: none;
     height: 60%;
-    margin: 3% 20% 3% 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
     width: 80%;
+    
     color: var(--dk-grey);
     background-color: var(--lt-grey);
 }
