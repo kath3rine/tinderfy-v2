@@ -7,6 +7,7 @@ import Interests from '../components/Interests'
 import LookingFor from '../components/LookingFor'
 import Basics from '../components/Basics'
 import MyAnthem from '../components/MyAnthem';
+import Menu from '../components/Menu';
 import '../styles/Profile.css'
 
 const PartnerPage = () => {
@@ -20,9 +21,7 @@ const PartnerPage = () => {
 
     return (
         <div>
-            <button onClick={goToUser}>
-                My profile
-            </button>
+            
             {message && 
                 
                 <div className="profile-base">
@@ -50,6 +49,8 @@ const PartnerPage = () => {
                     name={message.album} 
                     pfp={message.album_pfp} 
                     artist={message.album_artist}/>
+
+                    <Menu/>
                 </div>  
             }
         </div>

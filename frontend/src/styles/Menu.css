@@ -1,0 +1,32 @@
+@import './Global.css';
+
+#menu {
+    position: fixed;
+    top: 95vh;
+    width: 500px;
+    bottom: 0;
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    border-top: 3px var(--lt-grey) solid;
+}
+
+.menu-button {
+    font-weight: 700;
+    border-radius: 15px;
+    border: none;
+    height: 60%;
+    margin: 3% 20% 3% 10%;
+    width: 80%;
+    color: var(--dk-grey);
+    background-color: var(--lt-grey);
+}
+
+.menu-button:hover {
+    border: 3px var(--scarlet) solid;
+}
+
+.menu-button-container {
+    width: 50%;
+}

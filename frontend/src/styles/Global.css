@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+:root {
+    --pink: #FF0072;
+    --scarlet: #FF5864;
+    --orange: #FF7F47;
+    --background: #c6d1f0;
+    --lt-grey: #e8ebf2;
+    --md-grey: #565761;
+    --dk-grey: #363639;
+}
+
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    background-image: linear-gradient(to top right, var(--pink) , var(--orange));
+}

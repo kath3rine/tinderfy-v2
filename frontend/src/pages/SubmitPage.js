@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/Submit.css';
 import { useNavigate } from 'react-router-dom';
+import Menu from '../components/Menu';
 
 const SubmitPage = () => {
     const [pid, setPid] = useState('')
@@ -22,16 +24,24 @@ const SubmitPage = () => {
     };
 
     return(
-        <div>
-        <input 
-                type="text"
-                value={pid}
-                onChange={e => setPid(e.target.value)}
-                placeholder="Enter partner's playlist URL"
+        <div id="submit-base"
+        className="profile-base">
+            <h1>Find My Match</h1>
+
+            <input className='submit-component'
+            type="text"
+            value={pid}
+            onChange={e => setPid(e.target.value)}
+            placeholder="Enter the URL of your partner's playlist"
             />
-        <form onSubmit={goToPartner}>
-            <button type="submit">See partner's profile</button>
-        </form>
+
+            <form onSubmit={goToPartner}>
+                <button className='submit-component'
+                type="submit">
+                    See partner's profile
+                </button>
+            </form>
+            <Menu/>
         </div>
     );
 }

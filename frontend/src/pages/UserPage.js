@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header'
 import AboutMe from '../components/AboutMe'
 import Essentials from '../components/Essentials'
@@ -7,13 +6,13 @@ import Interests from '../components/Interests'
 import LookingFor from '../components/LookingFor'
 import Basics from '../components/Basics'
 import MyAnthem from '../components/MyAnthem';
+import Menu from '../components/Menu';
 import axios from "axios";
 import '../styles/Profile.css'
 
 const MePage = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:5000/user', { withCredentials: true })
@@ -23,17 +22,11 @@ const MePage = () => {
       });
   }, []);
 
-  const goToSubmit = () => {
-    navigate('/submit');
-  }
-
   if (error) return <div>{error.toString()}</div>
 
   return(
     <div>
-      <button onClick={goToSubmit}>
-        Find my match
-      </button>
+      
     
     <div>{data &&
       
@@ -62,6 +55,8 @@ const MePage = () => {
           name={data.album} 
           pfp={data.album_pfp} 
           artist={data.album_artist}/>
+        
+        <Menu/>
       </div>  
     }
     </div>
