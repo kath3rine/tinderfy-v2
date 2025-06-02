@@ -9,12 +9,20 @@ function Essentials(props) {
                 <h3>{props.title}</h3>
               </div>
 
-              {props.list.map((item, index) => (
-                <p className={`${index === props.list.length - 1 ? 'last-essential' : 'essential'}`}>
-                  <img className="icon" src={Icon}></img>
-                  {item}
-                </p>
-              ))}
+                <div id="item">
+                  {props.list.map((item, index) => (
+                    <div className={`${index === props.list.length - 1 ? 'last-essential' : 'essential'}`}>
+                      <img className="icon" src={Icon}></img>
+                      {props.artist_urls ? (
+                        <span><a href={props.artist_urls[index]}>{item}</a></span>
+                      ) : (
+                        <span>{item}</span>
+                      )}
+                    </div>
+                ))}
+                </div>
+
+              
         </div>
     );
 }

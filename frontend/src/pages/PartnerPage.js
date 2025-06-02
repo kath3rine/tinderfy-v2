@@ -17,19 +17,23 @@ const PartnerPage = () => {
     return (
         <div>
             {message && 
+
                 <div className="profile-base">
                     <Header 
                     name={message.name} 
                     pfp={message.pfp}/>
  
-                     <AboutMe 
-                     title={`${message.name}'s favorite songs`}
+                    <AboutMe 
+                    title={`${message.name}'s favorite songs`}
                     names={message.track_names} 
-                    artists={message.track_artists}/> 
+                    artists={message.track_artists}
+                    urls={message.track_urls}/> 
 
                     <Essentials 
                     title={`${message.name}'s favorite artists`}
-                    list={message.top_artists}/>
+                    list={message.top_artists}
+                    artist_urls={message.artist_urls}/>
+
                     {message.shared_artists.length > 0 && 
                         <div>
                             <Essentials 
@@ -48,11 +52,15 @@ const PartnerPage = () => {
                     <LookingFor 
                     title="Uniqueness score"
                     x={100 - message.popularity}/>
-            
-                    <Basics 
-                    title="Recommendations"
-                    artist={message.rec_artist} 
-                    track={message.rec_track}/>
+
+                    { (message.rec_artist != "None" || message.rec_track != "None") && 
+                        <Basics title="Recommendations"
+                        artist={message.rec_artist} 
+                        artist_url={message.rec_artist_url}
+                        track={message.rec_track}
+                        track_url={message.rec_track_url}/>
+                    }
+                   
             
                     <MyAnthem 
                     title={`${message.name}'s album`}

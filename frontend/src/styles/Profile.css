@@ -30,6 +30,17 @@
     margin-right: 10px;
 }
 
+
+* a, * p {
+    color: var(--dk-grey);
+}
+
+* a:hover {
+    color: var(--scarlet);
+}
+
+/* name + pic */
+
 #header {
     margin-top: 0px;
     display: flex;
@@ -56,18 +67,25 @@
     float: right;
 }
 
-#about-me p {
+/* songs */
+
+#about-me p, #about-me a {
     margin: 5px;
 }
 
-#essentials p, #basics p {
-    padding: 5px;
-    margin-top: 0px;
+/* artists */
+
+.essential span, .last-essential span, #basic-rec {
+    padding-right: 10px;
 }
 
 .essential {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
     border-bottom: 1px var(--lt-grey) solid;
 }
+
+/* genres */
 
 .bubbles {
     display: flex;
@@ -89,6 +107,8 @@
     color: white;
 }
 
+/* uniqueness */
+
 #looking-for h2 {
     margin-top: 10px;
     color: var(--dk-grey);
@@ -99,18 +119,18 @@
     margin-right: 15px;
 }
 
-#artist-track-rec {
-    border-bottom: 1px var(--lt-grey) solid;
-}
+/* recs */
 
-#no-track-rec {
-    display: none
-}
-
-.basic-title {
+#basic-subtitle {
     font-weight: 700;
     color: var(--md-grey);
 }
+#basic-border {
+    border-bottom: 1px var(--lt-grey) solid;
+    padding-bottom: 15px;
+}
+
+/* album */
 
 #my-anthem {
     padding-bottom: 8vh;

@@ -30,11 +30,9 @@ class Person():
 
         # recommendations
         self.rec_artist = "no_rec_artist"
+        self.rec_track_url = "no_rec_artist_url"
         self.rec_track = "no_rec_track"
-    
-    
-    
-
+        self.rec_track_url = "no_rec_track_url"
     
     # methods for using lastfm api 
     def lastfm_api(self, method: str, parameters: list):
@@ -54,15 +52,18 @@ class Person():
     
     def similar_artist(self, artist):
         data = self.lastfm_api(method='artist.getsimilar', parameters=[('artist', artist)])
-        return data['similarartists']['artist'][0]['name']
+        if data['similarartists']['artist']:
+            rec = data['similarartists']['artist'][0]
+            return (rec['name'], rec['url'])
+        return ("None", "None")
     
     def similar_track(self, artist, track):
         data = self.lastfm_api(method='track.getsimilar', parameters=[('artist', artist), ('track', track)])
         if data['similartracks']['track']:
             rec = data['similartracks']['track'][0]
-            return f"{rec['name']} by {rec['artist']['name']}"
-        return f"None"
-
+            return (f"{rec['name']} by {rec['artist']['name']}", rec['url'])
+        return ("None", "None")
+        
 class User(Person):
     def __init__(self, headers):
         super().__init__()
@@ -113,8 +114,8 @@ class User(Person):
         self.album_artist = album_data['artists'][0]['name']
 
         # recommendations
-        self.rec_artist = self.similar_artist(self.top_artists[0])
-        self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
+        (self.rec_artist, self.rec_artist_url) = self.similar_artist(self.top_artists[0])
+        (self.rec_track, self.rec_track_url) = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
     
 class Match(Person):
     def __init__(self, playlist : str, user : User):
@@ -140,12 +141,14 @@ class Match(Person):
 
         artist_ids = []
         self.artist_urls = []
+        self.track_urls = []
         track_pop = 0
         for t in playlist_data['tracks']['items']:
             # track data
             if len(self.track_names) < 5:
                 self.track_names.append(t['track']['name'])
                 self.track_artists.append(t['track']['artists'][0]['name'])
+                self.track_urls.append(t['track']['external_urls']['spotify'])
 
                 # album data
                 if self.album == "no_album":
@@ -153,8 +156,9 @@ class Match(Person):
                     self.album_artist = t['track']['album']['artists'][0]['name']
                     self.album_pfp = t['track']['album']['images'][0]['url']
 
-            # artist data
             track_pop += t['track']['popularity']
+
+            # artist data
             curr_a = t['track']['artists'][0]
             artist_ids.append(curr_a['id'])
             self.all_artists.append(curr_a['name'])
@@ -181,8 +185,9 @@ class Match(Person):
         self.popularity = (track_pop + artist_pop) // (len(playlist_data['tracks']['items']) + len(artist_data['artists']))
 
         # recommendations
-        self.rec_artist = self.similar_artist(self.top_artists[0])
-        self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
+        (self.rec_artist, self.rec_artist_url) = self.similar_artist(self.top_artists[0])
+        (self.rec_track, self.rec_track_url) = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
+
     
     # result data
     def initialize_results(self):

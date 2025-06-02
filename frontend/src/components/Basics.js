@@ -1,6 +1,20 @@
 import Logo from '../assets/basics-logo.png';
-import ArtistIcon from '../assets/person-logo.png';
-import SongIcon from '../assets/music-logo.png';
+import ArtistLogo from '../assets/person-logo.png';
+import SongLogo from '../assets/music-logo.png';
+
+function Component({subtitle, rec, style, logo, url}) {
+    return(
+        <div id={`${style == "border" ? "basic-border" : "basic"}`}>
+            <p id="basic-subtitle">{subtitle}</p>
+            <img className="icon" src={logo}></img>
+            <span id="basic-rec">
+                <a href={url}>
+                    {rec}
+                </a>
+            </span>
+        </div>
+    );
+}
 
 function Basics(props) {
     return(
@@ -10,22 +24,42 @@ function Basics(props) {
                     <h3>{props.title}</h3>
                 </div>
                 
+                { (props.track != "None" && props.artist != "None") ? (
+                    <div>
+                        <Component 
+                            subtitle="Artist" 
+                            rec={props.artist}
+                            style="border"
+                            logo={ArtistLogo}
+                            url={props.artist_url} />
+
+                        <Component 
+                            subtitle="Song" 
+                            rec={props.track}
+                            style="no-border"
+                            logo={SongLogo}
+                            url={props.track_url} />
+                    </div>
+                ) : (
+                    <div>
+                        {(props.track === "None" && props.artist != "None") ? (
+                            <Component 
+                            subtitle="Artist" 
+                            rec={props.artist}
+                            style="no-border"
+                            logo={ArtistLogo}
+                            url={props.artist_url} />
+                        ) : (
+                            <Component 
+                            subtitle="Song" 
+                            rec={props.track}
+                            style="no-border"
+                            logo={SongLogo}
+                            url={props.track_url} />
+                        )}
+                    </div>
+                )}
                 
-                <div className="basic-item" id={`${props.track == "None" ? "artist-no-track-rec" : "artist-track-rec"}`}>
-                    <p className="basic-title">Artist</p>
-                    <div className='title-container'>
-                        <img className="icon" src={ArtistIcon}></img>
-                        <p className="basic-text">{props.artist}</p>
-                    </div>
-                </div>
-                <div className="basic-item" id={`${props.track == "None" ? "no-track-rec" : "track-rec"}`}>
-                    <p className="basic-title">Song</p>
-                    <div className='title-container'>
-                        <img className="icon" src={SongIcon}></img>
-                        <p className="basic-text">{props.track}</p>
-                    </div>
-                    
-                </div>
             </div>
     );
 }
