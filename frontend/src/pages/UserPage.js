@@ -47,9 +47,13 @@ const MePage = () => {
         <LookingFor title="Uniqueness score"
           x={100 - data.popularity}/>
 
-        <Basics title="Recommendations"
+        { (data.rec_artist != "None" || data.rec_track != "None") && 
+          <Basics title="Recommendations"
           artist={data.rec_artist} 
-          track={data.rec_track}/>
+          artist_url={data.rec_artist_url}
+          track={data.rec_track}
+          track_url={data.rec_track_url}/>
+        }
 
         <MyAnthem title="My album"
           name={data.album} 
