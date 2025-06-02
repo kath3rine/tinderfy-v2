@@ -14,25 +14,22 @@ const PartnerPage = () => {
     const location = useLocation();
     const { message } = location.state || {};
     const navigate = useNavigate();
-    
-    const goToUser = () => {
-        navigate('/');
-    }
 
     return (
         <div>
             
             {message && 
+            
                 
                 <div className="profile-base">
                     <Header name={message.name} 
                     pfp={message.pfp}/>
  
-                    <AboutMe title={`${message.name}'s favorite songs`}
+                     <AboutMe title={`${message.name}'s favorite songs`}
                     names={message.track_names} 
-                    artists={message.track_artists}/>
+                    artists={message.track_artists}/> 
             
-                    <Essentials title={`${message.name}'s top artists`}
+                     <Essentials title={`${message.name}'s top artists`}
                     list={message.top_artists}/>
             
                     <Interests title="Genres"
@@ -50,7 +47,7 @@ const PartnerPage = () => {
                     pfp={message.album_pfp} 
                     artist={message.album_artist}/>
 
-                    <Menu/>
+            <Menu/> 
                 </div>  
             }
         </div>

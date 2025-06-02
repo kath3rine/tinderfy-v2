@@ -1,8 +1,9 @@
 from flask import Flask, session, redirect, request, jsonify
 from flask_cors import CORS
 from util import *
+import json
 import requests
-from person import User, Partner
+from person import User, Match
 from secret import CLIENT_ID, CLIENT_SECRET
 
 REDIRECT_URI = "http://localhost:5000/callback"
@@ -59,10 +60,15 @@ def me():
         return jsonify({'error': 'Not authenticated'}), 401
     
     headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
+    
     user = User(headers)
-    response = user.to_json()
-
-    return response
+    session['user'] = user.__dict__
+    
+    response = to_json(user)
+    #match = Match("https://open.spotify.com/playlist/1ZOtYbtsAK7ghkPRkZh7mH?si=909df393a9dc4782", session['user'])
+    #response = to_json(match)
+    return session['user']
+    #return response
 
 # enter other user's info
 @app.route('/match', methods=['POST'])
@@ -71,11 +77,12 @@ def match():
     pid = data.get('pid')
 
     if not pid:
-        return "error no pid"
+        return jsonify({"message": "error no pid"})
+    elif not session['user']:
+        return jsonify({"message": "no session user"})
     
-    headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
-    partner = Partner(headers, pid)
-    response = partner.to_json()
+    match = Match(pid, session['user'])
+    response = match.__dict__
     
     return jsonify({"message": response})
 

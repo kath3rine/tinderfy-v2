@@ -1,7 +1,5 @@
 import requests
 from util import *
-import json
-from collections import Counter
 from secret import API_KEY, SHARED_SECRET, USER_AGENT
 
 class Person():
@@ -34,13 +32,9 @@ class Person():
         self.rec_artist = "no_rec_artist"
         self.rec_track = "no_rec_track"
     
-    def to_json(self):
-        my_dict = self.__dict__
-        del my_dict['header']
-        return my_dict
     
-    def freq(self, lst, n):
-        return [x for x, cnt in Counter(lst).most_common(n)]
+    
+
     
     # methods for using lastfm api 
     def lastfm_api(self, method: str, parameters: list):
@@ -97,7 +91,7 @@ class User(Person):
             if a['genres']:
                 self.all_genres.append(a['genres'][0])
         self.top_artists = self.all_artists[:3]
-        self.top_genres = self.freq(self.all_genres, 5)
+        self.top_genres = freq(self.all_genres, 5)
         self.all_genres = list(set(self.all_genres))
 
         # track data
@@ -121,14 +115,17 @@ class User(Person):
         self.rec_artist = self.similar_artist(self.top_artists[0])
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
     
-class Partner(Person):
-    def __init__(self, headers, playlist):
+class Match(Person):
+    def __init__(self, playlist : str, user : User):
         super().__init__()
         self.playlist = playlist[34:56]
-        self.header = headers
-        self.initialize_partner() 
+        self.user = user
+        self.header = self.user['header']
+        self.initialize_match()
+        self.initialize_results()
+        
     
-    def initialize_partner(self):
+    def initialize_match(self):
         playlist_response = requests.get(f"{BASE_URL}/playlists/{self.playlist}", headers=self.header)
         playlist_data = playlist_response.response_text if playlist_response.status_code != 200 else playlist_response.json()
         
@@ -158,7 +155,7 @@ class Partner(Person):
             track_pop += t['track']['popularity']
             artist_ids.append(t['track']['artists'][0]['id'])
             self.all_artists.append(t['track']['artists'][0]['name'])
-        self.top_artists = self.freq(self.all_artists, 10)
+        self.top_artists = freq(self.all_artists, 3)
         
         # genre data
         artist_ids = list(set(artist_ids))[:49]
@@ -172,7 +169,7 @@ class Partner(Person):
             artist_pop += a['popularity']
             if a['genres']:
                 self.all_genres.append(a['genres'][0])
-        self.top_genres = self.freq(self.all_genres, 5)
+        self.top_genres = freq(self.all_genres, 5)
         self.all_genres = list(set(self.all_genres))
         
         # popularity data
@@ -181,3 +178,7 @@ class Partner(Person):
         # recommendations
         self.rec_artist = self.similar_artist(self.top_artists[0])
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
+    
+    def initialize_results(self):
+        self.shared_artists = intersect(self.all_artists, self.user['all_artists'], 3)
+        self.shared_genres = intersect(self.all_genres, self.user['all_genres'], 5)
