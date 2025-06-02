@@ -17,7 +17,7 @@ function Menu() {
                 <button id="user-button"
                     className="menu-button"
                     onClick={onClickUser}>
-                    My profile
+                    Profile
                 </button>
             </div>
             
@@ -25,7 +25,7 @@ function Menu() {
                 <button id="submit-button"
                     className="menu-button"
                     onClick={onClickSubmit}>
-                    Find my match
+                    Match
                 </button>
             </div>
             

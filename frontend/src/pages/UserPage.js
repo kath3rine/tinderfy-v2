@@ -39,10 +39,10 @@ const MePage = () => {
           artists={data.track_artists}/>
 
         <Essentials title="My top artists"
-          list={data.artist_names.slice(0, 3)}/>
+          list={data.top_artists}/>
 
         <Interests title="Genres"
-          list={data.genres}/>
+          list={data.top_genres}/>
 
         <LookingFor title="Uniqueness score"
           x={100 - data.popularity}/>
