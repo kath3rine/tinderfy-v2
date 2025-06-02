@@ -76,6 +76,7 @@ class User(Person):
             return data.response_text
         return data.json()
     
+    # Person data
     def initialize_user(self):
         # user data
         user_data = self.get_my_data("")
@@ -124,7 +125,7 @@ class Match(Person):
         self.initialize_match()
         self.initialize_results()
         
-    
+    # Person data
     def initialize_match(self):
         playlist_response = requests.get(f"{BASE_URL}/playlists/{self.playlist}", headers=self.header)
         playlist_data = playlist_response.response_text if playlist_response.status_code != 200 else playlist_response.json()
@@ -138,6 +139,7 @@ class Match(Person):
             self.pfp = user_data["images"][0]["url"]
 
         artist_ids = []
+        self.artist_urls = []
         track_pop = 0
         for t in playlist_data['tracks']['items']:
             # track data
@@ -153,9 +155,12 @@ class Match(Person):
 
             # artist data
             track_pop += t['track']['popularity']
-            artist_ids.append(t['track']['artists'][0]['id'])
-            self.all_artists.append(t['track']['artists'][0]['name'])
+            curr_a = t['track']['artists'][0]
+            artist_ids.append(curr_a['id'])
+            self.all_artists.append(curr_a['name'])
+            self.artist_urls.append(curr_a['external_urls']['spotify'])
         self.top_artists = freq(self.all_artists, 3)
+        self.artist_urls = freq(self.artist_urls, 3)
         
         # genre data
         artist_ids = list(set(artist_ids))[:49]
@@ -179,6 +184,7 @@ class Match(Person):
         self.rec_artist = self.similar_artist(self.top_artists[0])
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
     
+    # result data
     def initialize_results(self):
         self.shared_artists = intersect(self.all_artists, self.user['all_artists'], 3)
         self.shared_genres = intersect(self.all_genres, self.user['all_genres'], 5)

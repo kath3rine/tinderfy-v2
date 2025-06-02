@@ -9,10 +9,10 @@ function Essentials(props) {
                 <h3>{props.title}</h3>
               </div>
 
-              {[0, 1, 2].map((i) => (
-                <p className={`${i == 4 ? 'last-essential' : 'essential'}`}>
+              {props.list.map((item, index) => (
+                <p className={`${index === props.list.length - 1 ? 'last-essential' : 'essential'}`}>
                   <img className="icon" src={Icon}></img>
-                  {props.list[i]}
+                  {item}
                 </p>
               ))}
         </div>

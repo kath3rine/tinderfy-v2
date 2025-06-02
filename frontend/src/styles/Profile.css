@@ -69,16 +69,24 @@
     border-bottom: 1px var(--lt-grey) solid;
 }
 
-#bubbles {
+.bubbles {
     display: flex;
     flex-wrap: wrap;
 }
 
-#bubble {
+.bubble {
     border-radius: 30px;
     padding: 5px 10px 5px 10px;
     margin: 5px;
+}
+
+#grey-bubble {
     background-color: var(--lt-grey);
+}
+
+#red-bubble {
+    background-image: linear-gradient(to top right, var(--scarlet) , var(--magenta));
+    color: white;
 }
 
 #looking-for h2 {

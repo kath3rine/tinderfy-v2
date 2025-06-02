@@ -43,7 +43,7 @@ const SubmitPage = () => {
             <form onSubmit={goToPartner}>
                 <button className='submit-component'
                 type="submit">
-                    See partner's profile
+                    See profile
                 </button>
             </form>
             <Menu/>

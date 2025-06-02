@@ -63,12 +63,8 @@ def me():
     
     user = User(headers)
     session['user'] = user.__dict__
-    
-    response = to_json(user)
-    #match = Match("https://open.spotify.com/playlist/1ZOtYbtsAK7ghkPRkZh7mH?si=909df393a9dc4782", session['user'])
-    #response = to_json(match)
+
     return session['user']
-    #return response
 
 # enter other user's info
 @app.route('/match', methods=['POST'])

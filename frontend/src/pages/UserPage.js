@@ -31,8 +31,6 @@ const MePage = () => {
     <div>{data &&
       
       <div className="profile-base">
-        <p>{data.all_genres}</p>
-        <p>{data.all_artists}</p>
         <Header name={data.name} 
           pfp={data.pfp}/>
 

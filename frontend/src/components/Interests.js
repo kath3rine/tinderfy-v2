@@ -8,9 +8,16 @@ function Interests(props) {
                 <h3>{props.title}</h3>
             </div>
               
-              <div id="bubbles">
+              <div className="bubbles">
+                {props.red_list && 
+                    <div className="bubbles">
+                        {props.red_list.map((item) => (
+                            <div className="bubble" id="red-bubble">{item}</div>
+                        ))}
+                    </div>
+                }
                 {props.list.map((item) => (
-                    <div id="bubble">{item}</div>
+                        <div className="bubble" id="grey-bubble">{item}</div>
                 ))}
               </div>
         </div>
