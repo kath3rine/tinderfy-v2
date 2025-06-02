@@ -10,9 +10,13 @@ class Person():
         self.name = "no_name"
         self.pfp = "no_pfp"
 
-        # artist + genre data
-        self.artist_names = []
-        self.genres = []
+        # artist data
+        self.top_artists = []
+        self.all_artists = []
+
+        # genre data
+        self.top_genres = []
+        self.all_genres = []
 
         # track data
         self.track_names = []
@@ -34,6 +38,9 @@ class Person():
         my_dict = self.__dict__
         del my_dict['header']
         return my_dict
+    
+    def freq(self, lst, n):
+        return [x for x, cnt in Counter(lst).most_common(n)]
     
     # methods for using lastfm api 
     def lastfm_api(self, method: str, parameters: list):
@@ -85,11 +92,13 @@ class User(Person):
         artist_pop = 0
         artist_data = self.get_my_data("top/artists?limit=10")
         for a in artist_data['items']:
-            self.artist_names.append(a['name'])
+            self.all_artists.append(a['name'])
             artist_pop += a['popularity']
             if a['genres']:
-                self.genres.append(a['genres'][0])
-            self.genres = list(dict.fromkeys(self.genres))[:5]
+                self.all_genres.append(a['genres'][0])
+        self.top_artists = self.all_artists[:3]
+        self.top_genres = self.freq(self.all_genres, 5)
+        self.all_genres = list(set(self.all_genres))
 
         # track data
         track_pop = 0
@@ -100,7 +109,7 @@ class User(Person):
             track_pop += t['popularity']
         
         # popularity data
-        self.popularity = (track_pop + artist_pop) // (len(self.track_names) + len(self.artist_names))
+        self.popularity = (track_pop + artist_pop) // (len(self.track_names) + len(self.all_artists))
         
         # album data
         album_data = self.get_my_data("albums?limit=1")['items'][0]['album']
@@ -109,7 +118,7 @@ class User(Person):
         self.album_artist = album_data['artists'][0]['name']
 
         # recommendations
-        self.rec_artist = self.similar_artist(self.artist_names[0])
+        self.rec_artist = self.similar_artist(self.top_artists[0])
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])
     
 class Partner(Person):
@@ -117,7 +126,7 @@ class Partner(Person):
         super().__init__()
         self.playlist = playlist[34:56]
         self.header = headers
-        self.initialize_partner()
+        self.initialize_partner() 
     
     def initialize_partner(self):
         playlist_response = requests.get(f"{BASE_URL}/playlists/{self.playlist}", headers=self.header)
@@ -148,12 +157,12 @@ class Partner(Person):
             # artist data
             track_pop += t['track']['popularity']
             artist_ids.append(t['track']['artists'][0]['id'])
-            self.artist_names.append(t['track']['artists'][0]['name'])
-        
-        self.artist_names = [a for a, cnt in Counter(self.artist_names).most_common(3)]
+            self.all_artists.append(t['track']['artists'][0]['name'])
+        self.top_artists = self.freq(self.all_artists, 10)
         
         # genre data
         artist_ids = list(set(artist_ids))[:49]
+
         aid_str = ",".join(artist_ids)
         artist_response = requests.get(f"{BASE_URL}/artists", params={"ids": aid_str}, headers=self.header)
         artist_data = artist_response.response_text if artist_response.status_code != 200 else artist_response.json()
@@ -162,12 +171,13 @@ class Partner(Person):
         for a in artist_data['artists']:
             artist_pop += a['popularity']
             if a['genres']:
-                self.genres.append(a['genres'][0])
-        self.genres = [g for g, cnt in Counter(self.genres).most_common(5)]
+                self.all_genres.append(a['genres'][0])
+        self.top_genres = self.freq(self.all_genres, 5)
+        self.all_genres = list(set(self.all_genres))
         
         # popularity data
         self.popularity = (track_pop + artist_pop) // (len(playlist_data['tracks']['items']) + len(artist_data['artists']))
 
         # recommendations
-        self.rec_artist = self.similar_artist(self.artist_names[0])
+        self.rec_artist = self.similar_artist(self.top_artists[0])
         self.rec_track = self.similar_track(track=self.track_names[0], artist=self.track_artists[0])

@@ -28,15 +28,15 @@ const PartnerPage = () => {
                     <Header name={message.name} 
                     pfp={message.pfp}/>
  
-                    <AboutMe title="My favorite songs"
+                    <AboutMe title={`${message.name}'s favorite songs`}
                     names={message.track_names} 
                     artists={message.track_artists}/>
             
-                    <Essentials title="My top artists"
-                    list={message.artist_names.slice(0, 3)}/>
+                    <Essentials title={`${message.name}'s top artists`}
+                    list={message.top_artists}/>
             
                     <Interests title="Genres"
-                    list={message.genres}/>
+                    list={message.top_genres}/>
             
                     <LookingFor title="Uniqueness score"
                     x={100 - message.popularity}/>
@@ -45,7 +45,7 @@ const PartnerPage = () => {
                     artist={message.rec_artist} 
                     track={message.rec_track}/>
             
-                    <MyAnthem title="My album"
+                    <MyAnthem title={`${message.name}'s album`}
                     name={message.album} 
                     pfp={message.album_pfp} 
                     artist={message.album_artist}/>
