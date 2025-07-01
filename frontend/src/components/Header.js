@@ -1,11 +1,6 @@
 import React from 'react'
 
-interface HeaderProps {
-    name: string;
-    pfp: string;
-}
-
-const Header : React.FC<HeaderProps> = ({name, pfp}) => {
+function Header({name, pfp}) {
     return(
         <div className="component" id="header">
             <div id="name-container">

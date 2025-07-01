@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Header from '../components/Header.tsx'
+import Header from '../components/Header'
 import AboutMe from '../components/AboutMe'
 import Essentials from '../components/Essentials'
 import Interests from '../components/Interests'
