@@ -11,7 +11,7 @@ function AboutMe(props) {
                 <div>
                   {props.urls ? (
                   <div>
-                    {[0, 1, 2, 3, 4].map((i) => (
+                    {Array.from({ length: 5 }, (_, i) => i).map((i) => (
                       <div><a href={props.urls[i]}>
                         {i+1}. {props.names[i]} by {props.artists[i]}
                       </a></div>
@@ -19,7 +19,7 @@ function AboutMe(props) {
                   </div>
                   ) : (
                     <div>
-                      {[0, 1, 2, 3, 4].map((i) => (
+                      {Array.from({ length: 5 }, (_, i) => i).map((i) => (
                         <p>{i+1}. {props.names[i]} by {props.artists[i]}</p>
                       ))}
                     </div>

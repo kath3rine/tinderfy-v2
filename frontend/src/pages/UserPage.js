@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header'
+import Header from '../components/Header.tsx'
 import AboutMe from '../components/AboutMe'
 import Essentials from '../components/Essentials'
 import Interests from '../components/Interests'
